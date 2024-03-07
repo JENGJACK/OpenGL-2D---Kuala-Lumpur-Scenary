@@ -18,8 +18,6 @@ float speedMultiplier = 1.0f; // Speed multiplier , night will be slower default
 
 bool cloudMoving = true; // default cloud is moving 
 
-
-
 //Initialize OpenGL Graphics 
 void initGL() {
     // Set "clearing" or background color
@@ -516,7 +514,7 @@ void clouds(float x, float y) {
 }
 
 //draw sun / moon at night 
-void drawSun() {
+void drawSunMoon() {
     int numSegments = 100;
     GLfloat radius = 0.1f; // Sun radius
     GLfloat cx = 0.9f; // Sun X position, top right corner
@@ -533,6 +531,21 @@ void drawSun() {
         glVertex2f(x + cx, y + cy);
     }
     glEnd();
+
+    // Check if it's nighttime
+    if (!isDay) {
+        // Draw the moon covering the sun
+        glColor3ub(38, 77, 115); // Dark blue color
+        glBegin(GL_TRIANGLE_FAN);
+        glVertex2f(cx + 0.1f, cy); // Center of circle, shifted to the right
+        for (int i = 0; i <= numSegments; i++) { // Last vertex same as first vertex
+            GLfloat angle = 2.5f * 3.1415926f * float(i) / float(numSegments); // 360 degrees in radians
+            GLfloat x = radius * cosf(angle) * 0.5f; // Make the moon smaller than the sun
+            GLfloat y = radius * sinf(angle);
+            glVertex2f(x + cx +0.05f , y + cy); // Shifted to the right
+        }
+        glEnd();
+    }
 }
 
 //draw several buildings in front of KLCC and Kl Tower 
@@ -1073,7 +1086,7 @@ void display() {
     drawKLCC();
     road();
     buildings();
-    drawSun();
+    drawSunMoon();
   
     //draw moving cars 
     movingCar(carPosX, -0.17f);
@@ -1167,7 +1180,6 @@ void specialKeys(int key, int x, int y) {
     }
     glutPostRedisplay(); // Request a redraw of the window contents
 }
-
 
 //  Main function
 int main(int argc, char** argv) {
