@@ -18,6 +18,8 @@ float speedMultiplier = 1.0f; // Speed multiplier , night will be slower default
 
 bool cloudMoving = true; // default cloud is moving 
 
+
+
 //Initialize OpenGL Graphics 
 void initGL() {
     // Set "clearing" or background color
@@ -1152,18 +1154,20 @@ void mouse(int button, int state, int x, int y) {
 /* Callback handler for special-key event */
 void specialKeys(int key, int x, int y) {
     switch (key) {
-    case GLUT_KEY_F5:    // F1: Toggle between full-screen and windowed mode
+    case GLUT_KEY_F5:    // F5: Toggle between full-screen and windowed mode
         fullScreenMode = !fullScreenMode;         // Toggle state
         if (fullScreenMode) {                     // Full-screen mode
             glutFullScreen();                      // Switch into full screen
         }
-        else {                                         // Windowed mode
-            glutInitWindowSize(800, 480);  // Switch into windowed mode
+        else {                                     // Windowed mode
+            glutReshapeWindow(800, 480);          // Change window size
+            glutPositionWindow(50, 50);           // Set window position
         }
         break;
-  
     }
+    glutPostRedisplay(); // Request a redraw of the window contents
 }
+
 
 //  Main function
 int main(int argc, char** argv) {
@@ -1173,9 +1177,11 @@ int main(int argc, char** argv) {
     glutCreateWindow("Individual Assignment - Kuala Lumpur !!!");  // Create window with the given title
     glutDisplayFunc(display);       // Register callback handler for window re-paint event
     glutIdleFunc(combinedIdle);
+    glutSpecialFunc(specialKeys); // Register callback handler for special-key event
     glutReshapeFunc(reshape);       // Register callback handler for window re-size event
     glutKeyboardFunc(keyboard);
     glutMouseFunc(mouse);   // Register callback handler for mouse event
+    glutFullScreen();
     initGL();                       // Our own OpenGL initialization
     glutMainLoop();                 // Enter the infinite event-processing loop
     return 0;
