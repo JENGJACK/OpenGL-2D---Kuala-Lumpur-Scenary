@@ -520,17 +520,28 @@ void drawSunMoon() {
     GLfloat cx = 0.9f; // Sun X position, top right corner
     GLfloat cy = 0.9f; // Sun Y position, top right corner
 
-    // Start drawing the sun
-    glColor3f(1.0, 1.0, 0.0); // Yellow color
+    // Start drawing the sun with an improved gradient
     glBegin(GL_TRIANGLE_FAN);
     glVertex2f(cx, cy); // Center of circle
+    glColor3f(1.0, 0.85, 0.0); // Solid yellow for the center
+
     for (int i = 0; i <= numSegments; i++) { // Last vertex same as first vertex
         GLfloat angle = 2.0f * 3.1415926f * float(i) / float(numSegments); // 360 degrees in radians
+
+        // Calculate gradient
+        GLfloat fraction = float(i) / float(numSegments);
+        GLfloat red = 1.0; // Keep red constant to ensure the color stays within the yellow-orange-red spectrum
+        GLfloat green = 0.85 * (1 - fraction); // Decrease green to transition from yellow to orange/red
+        GLfloat blue = 0.0; // Keep blue at 0
+
+        glColor3f(red, green, blue); 
+
         GLfloat x = radius * cosf(angle);
         GLfloat y = radius * sinf(angle);
         glVertex2f(x + cx, y + cy);
     }
     glEnd();
+
 
     // Check if it's nighttime
     if (!isDay) {
