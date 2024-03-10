@@ -4,6 +4,8 @@
 
 Title : Kuala Lumpur Scenary 
 
+github link : https://github.com/JENGJACK/OpenGL-2D---Kuala-Lumpur-Scenary
+
 Steps to run the project : 
 1. Unzip the project 
 2. Open the folder and click on kualalumpurscenary.sln 
