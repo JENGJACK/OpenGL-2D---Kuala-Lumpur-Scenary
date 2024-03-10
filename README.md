@@ -20,7 +20,7 @@ Keyboard interaction :
 - esc = to exit the whole program
 
 Mouse interaction : 
-- left click is to stop all the movement (Clouds in daytime and cars moving)
+- left click is to stop all the movement (Clouds in daytime and cars moving in daytime & nighttime)
 
 Special Key interaction : 
 - F5 - to make it window size or full screen
