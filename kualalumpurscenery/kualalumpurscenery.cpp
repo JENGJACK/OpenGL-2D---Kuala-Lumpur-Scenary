@@ -1,6 +1,7 @@
 //include necessary library 
 #include <GL/glut.h>  // GLUT, include glu.h and gl.h
 #include <math.h>
+#include <iostream>
 
 //global variable
 bool isDay = true; //start with dayTime first
@@ -11,7 +12,7 @@ float carPosX = -1.3f; // Start from the left side
 float carSpeed = 0.001f; // Adjust the speed of the car 
 
 //initialization for second car  
-float carPosX2 = 0.75f; // Start from the left side
+float carPosX2 = 0.75f; // Start from the right side
 float carSpeedCar2 = 0.001f; // Adjust the speed of the car
 
 float speedMultiplier = 1.0f; // Speed multiplier , night will be slower default set it to 1 
@@ -888,6 +889,41 @@ void buildings() {
 
 }
 
+void lamppost() {
+    // Base of the lamppost
+    glColor3ub(80, 80, 80); // Dark gray
+    glBegin(GL_QUADS);
+    glVertex2f(-0.6, -0.82); 
+    glVertex2f(-0.6, -0.72); 
+    glVertex2f(-0.55, -0.72); 
+    glVertex2f(-0.55, -0.82); 
+    glEnd();
+
+    // Pole of the lamppost
+    glColor3ub(100, 100, 100); // Gray
+    glBegin(GL_QUADS);
+    glVertex2f(-0.58, -0.72); 
+    glVertex2f(-0.58, -0.32); 
+    glVertex2f(-0.57, -0.32); 
+    glVertex2f(-0.57, -0.72); 
+    glEnd();
+
+    // Top of the lamppost (light source area)
+    // Determine the color based on the time of day
+    if (isDay) {
+        glColor3ub(255, 255, 255); // White for day time
+    }
+    else {
+        glColor3ub(255, 165, 0); // Orange for night time
+    }
+    glBegin(GL_QUADS);
+    glVertex2f(-0.59, -0.32); 
+    glVertex2f(-0.59, -0.30); 
+    glVertex2f(-0.56, -0.30); 
+    glVertex2f(-0.56, -0.32); 
+    glEnd();
+}
+
 //draw first car 
 void movingCar(float x, float y) {
     // Draw the body of the car
@@ -1099,9 +1135,12 @@ void display() {
     buildings();
     drawSunMoon();
   
-    //draw moving cars 
-    movingCar(carPosX, -0.17f);
-    movingCar2(carPosX2, -0.3f);
+    
+    movingCar(carPosX, -0.17f);//draw moving cars 
+    lamppost();
+    movingCar2(carPosX2, -0.3f);//draw moving cars 
+
+
 
 
     // Swap the front and back buffers to display the rendered image
@@ -1204,7 +1243,6 @@ int main(int argc, char** argv) {
     glutReshapeFunc(reshape);       // Register callback handler for window re-size event
     glutKeyboardFunc(keyboard);
     glutMouseFunc(mouse);   // Register callback handler for mouse event
-    glutFullScreen();
     initGL();                       // Our own OpenGL initialization
     glutMainLoop();                 // Enter the infinite event-processing loop
     return 0;
