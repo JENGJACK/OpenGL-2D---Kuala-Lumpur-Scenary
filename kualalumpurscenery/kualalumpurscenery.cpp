@@ -93,7 +93,13 @@ void drawKLTower() {
     glVertex2f(-0.66f, 0.5f);
 
     // "lighting effects" 
-    glColor3ub(255, 215, 0); 
+    if (isDay) {
+        glColor3ub(194, 194, 194); // Lighter grey color
+    }
+    else {
+        glColor3ub(255, 215, 0); // Yellow color
+    }
+
     glVertex2f(-0.93f, 0.44f);
     glVertex2f(-0.83f, 0.44f);
     glVertex2f(-0.83f, 0.47f);
@@ -165,9 +171,18 @@ void drawKLCC() {
     glVertex2f((0.6f + xOffset) * scale, 0.3f * scale); // Base right
     glEnd();
 
+
+    //window lightness
+    float windowLightness;
+
+    if (isDay) {
+        windowLightness = 0.8f; // Light gray color during the day
+    }
+    else {
+        windowLightness = 1.0f; // White color during the night
+    }
+
     // Draw windows for Tower 1
-    // Updated Draw windows for Tower 1 with consistent color
-    float windowLightness = 0.9f; // Fixed lightness for windows
     for (float y = (-0.45f * scale); y < (0.3f * scale); y += (0.03f * scale + 0.01f * scale)) {
         for (float x = ((0.12f + xOffset) * scale); x < ((0.28f + xOffset) * scale); x += (0.02f * scale + 0.01f * scale)) {
             glColor3f(windowLightness, windowLightness, windowLightness); // Consistent color for all windows
@@ -180,7 +195,7 @@ void drawKLCC() {
         }
     }
 
-    // Updated Draw windows for Tower 2 with consistent color
+    //  Tower 2 windows
     for (float y = (-0.45f * scale); y < (0.3f * scale); y += (0.03f * scale + 0.01f * scale)) {
         for (float x = ((0.42f + xOffset) * scale); x < ((0.58f + xOffset) * scale); x += (0.02f * scale + 0.01f * scale)) {
             glColor3f(windowLightness, windowLightness, windowLightness); // Consistent color for all windows
@@ -531,9 +546,9 @@ void drawSunMoon() {
 
         // Calculate gradient
         GLfloat fraction = float(i) / float(numSegments);
-        GLfloat red = 1.0; // Keep red constant to ensure the color stays within the yellow-orange-red spectrum
-        GLfloat green = 0.85 * (1 - fraction); // Decrease green to transition from yellow to orange/red
-        GLfloat blue = 0.0; // Keep blue at 0
+        GLfloat red = 1.0;
+        GLfloat green = 0.85 * (1 - fraction); 
+        GLfloat blue = 0.0; 
 
         glColor3f(red, green, blue); 
 
@@ -549,7 +564,7 @@ void drawSunMoon() {
         // Draw the moon covering the sun
         glColor3ub(38, 77, 115); // Dark blue color
         glBegin(GL_TRIANGLE_FAN);
-        glVertex2f(cx + 0.1f, cy); // Center of circle, shifted to the right
+        glVertex2f(cx + 0.1f, cy); 
         for (int i = 0; i <= numSegments; i++) { // Last vertex same as first vertex
             GLfloat angle = 2.5f * 3.1415926f * float(i) / float(numSegments); // 360 degrees in radians
             GLfloat x = radius * cosf(angle) * 0.5f; // Make the moon smaller than the sun
@@ -754,14 +769,52 @@ void buildings() {
     glVertex2f(-0.25, -0.7);
     glEnd();
 
+    // Windows
+    glBegin(GL_QUADS);
+    glColor3ub(255, 255, 255); // White (window color)
+
+    // First window
+    glVertex2f(-0.22, -0.4);
+    glVertex2f(-0.22, -0.45);
+    glVertex2f(-0.18, -0.45);
+    glVertex2f(-0.18, -0.4);
+
+    // Second window
+    glVertex2f(-0.22, -0.55);
+    glVertex2f(-0.22, -0.6);
+    glVertex2f(-0.18, -0.6);
+    glVertex2f(-0.18, -0.55);
+
+    // Third window
+    glVertex2f(-0.22, -0.65);
+    glVertex2f(-0.22, -0.7);
+    glVertex2f(-0.18, -0.7);
+    glVertex2f(-0.18, -0.65);
+    glEnd();
+
+
     //Building 8
     glBegin(GL_QUADS);
-    glColor3ub(180, 100, 50); 
+    glColor3ub(180, 100, 50); // brown
     glVertex2f(0.0, -0.7);
-    glVertex2f(0.0, -0.2); 
+    glVertex2f(0.0, -0.2);
     glVertex2f(-0.2, -0.2);
-    glVertex2f(-0.2, -0.7); 
+    glVertex2f(-0.2, -0.7);
     glEnd();
+
+    // Horizontal lines
+    glBegin(GL_LINES);
+    glColor3ub(0, 0, 0); // Black
+    glVertex2f(-0.2, -0.4); // Line 1
+    glVertex2f(0.0, -0.4);
+    glVertex2f(-0.2, -0.5); // Line 2
+    glVertex2f(0.0, -0.5);
+    glVertex2f(-0.2, -0.6); // Line 3
+    glVertex2f(0.0, -0.6);
+    glVertex2f(-0.2, -0.3); // Line 4
+    glVertex2f(0.0, -0.3);
+    glEnd();
+
 
     //Building 9
     glPushMatrix();
@@ -915,6 +968,19 @@ void lamppost() {
     }
     else {
         glColor3ub(255, 165, 0); // Orange for night time
+
+
+        //draw light
+         // Light color, often a soft yellow or similar to the light source but slightly faded
+        glColor3ub(255, 204, 102); // Soft yellow/orange
+        glBegin(GL_POLYGON);
+        // Starting from the right side of the lamppost's light source area
+        glVertex2f(-0.56, -0.32); // Right edge of the light source
+        glVertex2f(-0.54, -0.52); // Right and slightly down from the light source
+        // Extending the light towards the ground on the right side
+        glVertex2f(-0.52, -0.82);
+        glVertex2f(-0.56, -0.82); // Closer to the lamppost at the bottom
+        glEnd();
     }
     glBegin(GL_QUADS);
     glVertex2f(-0.59, -0.32); 
@@ -1120,9 +1186,8 @@ void display() {
     //if daytime draw moving clouds , if night draw starts
     if (isDay) {
         clouds(-0.8, 0.8);
-        clouds(-0.3, 0.65);
+        clouds(-0.3, 0.5);
         clouds(0.2, 0.8);
-        clouds(0.6, 0.75);
     }
     else {
         stars();
@@ -1134,6 +1199,11 @@ void display() {
     road();
     buildings();
     drawSunMoon();
+
+    //add a cloud in front of KLCC 
+    if (isDay) {
+        clouds(0.65, 0.45);
+    }
   
     
     movingCar(carPosX, -0.17f);//draw moving cars 
@@ -1182,6 +1252,7 @@ void keyboard(unsigned char key, int x, int y) {
     case 27:     // ESC key to exit program 
         exit(0);
         break;
+
     
    
     }
@@ -1236,9 +1307,9 @@ int main(int argc, char** argv) {
     glutInit(&argc, argv);          // Initialize GLUT
     glutInitWindowSize(800, 480);   // Set the window's initial width & height - non-square
     glutInitWindowPosition(50, 50); // Position the window's initial top-left corner
-    glutCreateWindow("Individual Assignment - Kuala Lumpur !!!");  // Create window with the given title
+    glutCreateWindow("Welcome to Kuala Lumpur !");  // Create window with the given title
     glutDisplayFunc(display);       // Register callback handler for window re-paint event
-    glutIdleFunc(combinedIdle);
+    glutIdleFunc(combinedIdle); //combining two cars moving function
     glutSpecialFunc(specialKeys); // Register callback handler for special-key event
     glutReshapeFunc(reshape);       // Register callback handler for window re-size event
     glutKeyboardFunc(keyboard);
